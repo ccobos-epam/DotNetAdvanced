@@ -1,0 +1,25 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Folder Name="/Cart/" />
+  <Folder Name="/Cart/Service/">
+    <Project Path="Cart/Service/CartService.csproj" />
+  </Folder>
+  <Folder Name="/Cart/Test/">
+    <Project Path="Cart/Test/CartServiceTest.csproj" />
+  </Folder>
+  <Folder Name="/Catalog/" />
+  <Folder Name="/Catalog/Code/">
+    <Project Path="Catalog/Code/BusinessLayer/BusinessLayer.csproj" />
+    <Project Path="Catalog/Code/CatalogService/CatalogService.csproj" />
+    <Project Path="Catalog/Code/DataAccess/DataAccess.csproj" />
+    <Project Path="Catalog/Code/DomainEntities/DomainEntities.csproj" />
+  </Folder>
+  <Folder Name="/Catalog/Test/">
+    <Project Path="Catalog/Test/IntegrationTest/IntegrationTest.csproj" />
+    <Project Path="Catalog/Test/UnitTest/UnitTest.csproj" />
+  </Folder>
+</Solution>

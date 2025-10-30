@@ -1,0 +1,44 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="dbup-core" Version="6.0.4" />
+    <PackageReference Include="dbup-sqlserver" Version="6.0.0" />
+    <PackageReference Include="FastEndpoints.Testing" Version="7.1.0-beta.26" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="10.0.0-rc.2.25502.107" />
+    <PackageReference Include="Testcontainers" Version="4.8.0" />
+    <PackageReference Include="Testcontainers.MsSql" Version="4.8.0" />
+    <PackageReference Include="TUnit" Version="0.75.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Code\BusinessLayer\BusinessLayer.csproj" />
+    <ProjectReference Include="..\..\Code\CatalogService\CatalogService.csproj" />
+    <ProjectReference Include="..\..\Code\DataAccess\DataAccess.csproj" />
+    <ProjectReference Include="..\..\Code\DomainEntities\DomainEntities.csproj" />
+  </ItemGroup>
+
+	<ItemGroup>
+		<Content Include="..\..\Code\DataAccess\SqlScript\**\*.sql">
+			<Link>BaseDataScript\%(RecursiveDir)%(Filename)%(Extension)</Link>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Remove="Endpoint\Categories\GetList\SeedData.sql" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Include="Endpoint\Categories\GetList\SeedData.sql">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </EmbeddedResource>
+	</ItemGroup>
+
+</Project>
