@@ -1,6 +1,7 @@
 using BusinessLayer;
 using DataAccess;
 using FastEndpoints;
+using FastEndpoints.Swagger;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,7 +23,19 @@ builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IProductService, ProductService>();
 
-builder.Services.AddFastEndpoints();
+builder.Services
+    .AddFastEndpoints()
+    .SwaggerDocument(o =>
+    {
+        o.MaxEndpointVersion = 1;
+        o.MinEndpointVersion = 1;
+        o.DocumentSettings = s =>
+        {
+            s.DocumentName = "Initial Release";
+            s.Title = "Catalog API";
+            s.Version = "v1";
+        }
+    });
 
 var app = builder.Build();
 
@@ -32,7 +45,15 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-app.UseFastEndpoints();
+Action<Config> FEConfig = options =>
+{
+    options.Versioning.Prefix = "v";
+    options.Versioning.PrependToRoute = false;
+    options.Versioning.DefaultVersion = 1;
+};
+app
+    .UseFastEndpoints(FEConfig)
+    .UseSwaggerGen();
 app.Run();
 
 public partial class Program { }
