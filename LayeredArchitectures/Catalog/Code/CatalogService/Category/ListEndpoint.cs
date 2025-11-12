@@ -1,10 +1,11 @@
 ﻿using FE = FastEndpoints;
 using BusinessLayer.Category;
 using BusinessLayer;
+using BusinessLayer.Product.List;
 
 namespace CatalogService.Category;
 
-public class ListEndpoint : FE.Endpoint<FE.EmptyRequest, IList<GetCategoryResponse>>
+public class ListEndpoint : FE.Endpoint<ListProductRequest, IList<GetCategoryResponse>>
 {
     public ICategoryService CategoryService { get; set; }
 
@@ -14,7 +15,7 @@ public class ListEndpoint : FE.Endpoint<FE.EmptyRequest, IList<GetCategoryRespon
         AllowAnonymous();
     }
 
-    public override async Task HandleAsync(FE.EmptyRequest request, CancellationToken cancellationToken)
+    public override async Task HandleAsync(ListProductRequest request, CancellationToken cancellationToken)
     {
         var response = await CategoryService.GetCategoryList();
         await Send.OkAsync(response, cancellationToken);
