@@ -9,14 +9,14 @@ namespace BusinessLayer.Product.List;
 
 public static class ListBuilder
 {
-    public IList<ProductEntity> CreateResultList(IList<ProductEntity> unfilteredResults, PagerObject pager)
+    public static IList<ProductEntity> CreateResultList(IList<ProductEntity> unfilteredResults, PagerObject pager)
     {
         IEnumerable<ProductEntity> query = unfilteredResults;
 
         if (pager.FilteringValues.Filters.Count > 0)
             query = FilterProducts.Filter(unfilteredResults, pager.FilteringValues);
 
-        if ()
+        return [];
     }
 }
 
@@ -24,6 +24,7 @@ internal static class FilterProducts
 {
     internal static IEnumerable<ProductEntity> Filter(IEnumerable<ProductEntity> unfilteredResults, FilteringValues filteringConditions)
     {
+        /*
         Func<ProductEntity, bool> IdPredicate = 
         foreach (var filterCondition in filteringConditions.Filters)
         {
@@ -43,6 +44,8 @@ internal static class FilterProducts
             if(stepPredicate is not null)
                 unfilteredResults.Where(stepPredicate);
         }
+        */
+        return unfilteredResults;
     }
 }
 

@@ -17,7 +17,7 @@ public class ListEndpoint : FE.Endpoint<FE.EmptyRequest, IList<GetProductRespons
 
     public override async Task HandleAsync(FE.EmptyRequest request, CancellationToken cancellationToken)
     {
-        var response = await ProductService.GetProductList();
+        var response = await ProductService.GetProductList(new BusinessLayer.Pager.PagerObject());
         await Send.OkAsync(response, cancellationToken);
     }
 }
