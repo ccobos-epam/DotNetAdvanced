@@ -77,7 +77,7 @@ public class ProductService : IProductService
     public async Task<IList<GetProductResponse>> GetProductList(PagerObject pagerObject)
     {
         IList<ProductEntity> productList = await repository.List();
-        IList<ProductEntity> pagerList = Product.List.ListBuilder.
+        IList<ProductEntity> pagerList = Product.List.ListBuilder.CreateResultList(productList, pagerObject);
         var responseList = productList.Select(x => Product.List.MapProducts.MapToResponseModel(x)).ToList();
         return responseList;
     }
@@ -123,6 +123,8 @@ public class ProductService : IProductService
             MemberExpression property = Expression.Property(parameter, filter.PropertyName);
             var (constant, propertyType) = GetTypedValue(property, filter.ValueToFilter);
         }
+
+        return result;
     }
 
     public static (ConstantExpression, Type) GetTypedValue(MemberExpression property, string value)
