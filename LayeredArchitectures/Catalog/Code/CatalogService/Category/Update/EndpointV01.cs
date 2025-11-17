@@ -27,6 +27,7 @@ public class EndpointV01 : FE.Endpoint<UpdateCategoryRequest, UpdateCategoryResp
                 .Add(new(new { Name = "Name to add", ParentCategoryId = Guid.NewGuid() }, "Basic Example", "Change in name and category", "Send new name to change"));
             s.ResponseExamples[200] = new UpdateCategoryResponse { Id = Guid.NewGuid(), Name = "Name to add", ParentCategoryId = Guid.NewGuid(), ParentCategoryName = "NewCategory" };
             s.Responses[200] = "The modified object";
+            s.Params["categoryId"] = "The Id of the category that we wish to modify";
         };
         Summary(es);
     }
