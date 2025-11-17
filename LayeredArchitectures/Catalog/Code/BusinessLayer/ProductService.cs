@@ -1,17 +1,21 @@
-﻿using BusinessLayer.Product;
+﻿using BusinessLayer.Pager;
+using BusinessLayer.Product;
 using DataAccess;
 using DomainEntities;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq.Expressions;
 
+using FilteredProduct = System.Func<DomainEntities.ProductEntity, bool>;
+using System.ComponentModel;
 namespace BusinessLayer;
 
 public interface IProductService
 {
     Task<CreateProductResponse> CreateProduct(CreateProductRequest request);
     Task<GetProductResponse> GetProduct(Guid productId);
-    Task<IList<GetProductResponse>> GetProductList();
+    Task<IList<GetProductResponse>> GetProductList(PagerObject pagerObject);
     Task<bool> DeleteProduct(Guid productId);
     Task<UpdateProductResponse> UpdateProduct(UpdateProductRequest request);
 }
@@ -70,20 +74,11 @@ public class ProductService : IProductService
         return response;
     }
 
-    public async Task<IList<GetProductResponse>> GetProductList()
+    public async Task<IList<GetProductResponse>> GetProductList(PagerObject pagerObject)
     {
-        var productList = await repository.List();
-        var responseList = productList.Select(x => new GetProductResponse()
-        {
-            Id = x.Id,
-            Name = x.Name,
-            Price = x.Price,
-            Ammount = x.Ammount,
-            Description = x.Description,
-            ImageUrl = x.ImageUrl,
-            CategoryName = x.Category.Name,
-            CategoryId = x.Category.Id,
-        }).ToList();
+        IList<ProductEntity> productList = await repository.List();
+        IList<ProductEntity> pagerList = Product.List.ListBuilder.
+        var responseList = productList.Select(x => Product.List.MapProducts.MapToResponseModel(x)).ToList();
         return responseList;
     }
 
@@ -115,5 +110,74 @@ public class ProductService : IProductService
             CategoryName = modifiedProduct.Category.Name
         };
         return response;
+    }
+
+    public static List<Expression<FilteredProduct>> GenerateFilteringConditions(List<FilteringElement> filters)
+    {
+        var result = new List<Expression<FilteredProduct>>();
+
+        ParameterExpression parameter = Expression.Parameter(typeof(FilteringElement), "product");
+
+        foreach (var filter in filters)
+        {
+            MemberExpression property = Expression.Property(parameter, filter.PropertyName);
+            var (constant, propertyType) = GetTypedValue(property, filter.ValueToFilter);
+        }
+    }
+
+    public static (ConstantExpression, Type) GetTypedValue(MemberExpression property, string value)
+    {
+        Type propertyType = property.Type;
+        Type underlyingType = Nullable.GetUnderlyingType(propertyType) ?? propertyType;
+
+        object? typedValue;
+        if (value == null || value.Equals("null", StringComparison.OrdinalIgnoreCase))
+            typedValue = null;
+        else
+        {
+            TypeConverter converter = TypeDescriptor.GetConverter(underlyingType);
+            typedValue = converter.ConvertFromInvariantString(value);
+        }
+
+        ConstantExpression constant = Expression.Constant(typedValue, propertyType);
+        return (constant, propertyType);
+    }
+
+    public static Expression BuildComparison(MemberExpression property, string operation, ConstantExpression constant)
+    {
+        return operation.ToLowerInvariant() switch
+        {
+            "equals" or "==" or "eq" => Expression.Equal(property, constant),
+            "notequals" or "!=" => Expression.NotEqual(property, constant),
+            "greaterthan" or ">" => Expression.GreaterThan(property, constant),
+            "greaterthanorequal" or ">=" => Expression.GreaterThanOrEqual(property, constant),
+            "lessthan" or "<" => Expression.LessThan(property, constant),
+            "lessthanorequal" or "<=" => Expression.LessThanOrEqual(property, constant),
+
+            // --- String Operations ---
+
+            "contains" => BuildStringMethodCall(property, "Contains", constant),
+            "startswith" => BuildStringMethodCall(property, "StartsWith", constant),
+            "endswith" => BuildStringMethodCall(property, "EndsWith", constant),
+
+            _ => throw new NotSupportedException($"Operation '{operation}' is not supported.")
+        };
+    }
+
+    private static Expression BuildStringMethodCall(MemberExpression property, string methodName, ConstantExpression constant)
+    {
+        if (property.Type != typeof(string))
+        {
+            throw new InvalidOperationException($"{methodName} is only supported for string properties.");
+        }
+
+        var method = typeof(string).GetMethod(methodName, new[] { typeof(string) });
+        if (method == null)
+        {
+            throw new MissingMethodException($"Could not find method '{methodName}' on type 'string'.");
+        }
+
+        // Creates the call: property.Contains(value)
+        return Expression.Call(property, method, constant);
     }
 }
