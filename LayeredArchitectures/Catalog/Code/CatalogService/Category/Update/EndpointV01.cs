@@ -10,7 +10,7 @@ public class EndpointV01 : FE.Endpoint<UpdateCategoryRequest, UpdateCategoryResp
 
     public override void Configure()
     {
-        Patch("/category/{categoryId}");
+        Patch("/categories/{categoryId}");
         Version(1);
         AllowAnonymous();
         Action<RouteHandlerBuilder> rhb = b =>
