@@ -20,8 +20,4 @@
     <InternalsVisibleTo Include=".\Test\IntegrationTest" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Category\Get\" />
-  </ItemGroup>
-
 </Project>

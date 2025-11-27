@@ -2,6 +2,7 @@
 using BusinessLayer.Category;
 using BusinessLayer;
 using FastEndpoints;
+using CatalogService.Category.Get;
 
 namespace CatalogService.Category.Create;
 
@@ -56,6 +57,6 @@ public class EndpointV01 : FE.Endpoint<CreateCategoryRequest, CreateCategoryResp
     public override async Task HandleAsync(CreateCategoryRequest request,  CancellationToken cancellationToken)
     {
         var response = await CategoryService.CreateCategory(request);
-        await Send.CreatedAtAsync<GetEndpoint>(response.Id,response, FE.Http.GET, null, false, default);
+        await Send.CreatedAtAsync<Get.EndpointV01>(response.Id, response, FE.Http.GET, null, false, cancellationToken);
     }
 }
