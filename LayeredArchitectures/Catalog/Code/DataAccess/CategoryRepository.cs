@@ -28,7 +28,7 @@ public class CategoryRepository : ICategoryRepository
 
     public async Task AddSingle(CategoryEntity entity)
     {
-        _appDbContext.Categories.Add(entity);
+        _ = _appDbContext.Categories.Add(entity);
         await _appDbContext.SaveChangesAsync();
     }
 
