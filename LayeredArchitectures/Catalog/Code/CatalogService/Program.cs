@@ -30,8 +30,8 @@ builder.Services
     {
         o.MaxEndpointVersion = 1;
         o.MinEndpointVersion = 1;
-        o.FlattenSchema = false;
-        o.ShortSchemaNames = false;
+        o.FlattenSchema = true;
+        o.ShortSchemaNames = true;
         o.DocumentSettings = s =>
         {
             s.DocumentName = "v1";
@@ -51,7 +51,7 @@ var app = builder.Build();
 Action<Config> FEConfig = options =>
 {
     options.Versioning.Prefix = "v";
-    options.Versioning.PrependToRoute = false;
+    options.Versioning.PrependToRoute = true;
     options.Versioning.DefaultVersion = 1;
 };
 Action<OpenApiDocumentMiddlewareSettings> FEOpenApi = options =>
