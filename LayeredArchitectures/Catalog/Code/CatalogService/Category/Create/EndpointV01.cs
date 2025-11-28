@@ -47,7 +47,7 @@ public class EndpointV01 : FE.Endpoint<CreateCategoryRequest, CreateCategoryResp
                 ParentCategoryId = Guid.NewGuid(), 
                 ParentCategoryName = "Parent Category" 
             };
-            s.Responses[200] = "The newly created object";
+            s.Responses[201] = "The newly created object";
         };
 
         Description(rhb, true);
