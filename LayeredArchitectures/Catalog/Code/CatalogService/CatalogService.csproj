@@ -21,7 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Product\Create\" />
     <Folder Include="Product\Delete\" />
     <Folder Include="Product\Get\" />
     <Folder Include="Product\List\" />
