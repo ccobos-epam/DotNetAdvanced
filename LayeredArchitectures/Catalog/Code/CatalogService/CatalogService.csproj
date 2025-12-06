@@ -14,17 +14,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BusinessLayer\BusinessLayer.csproj" />
+    <ProjectReference Include="..\Utilities\Utilities.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <InternalsVisibleTo Include=".\Test\IntegrationTest" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Product\Delete\" />
-    <Folder Include="Product\Get\" />
-    <Folder Include="Product\List\" />
-    <Folder Include="Product\Update\" />
   </ItemGroup>
 
 </Project>

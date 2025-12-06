@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 using Testcontainers.MsSql;
 using DbUp;
-using BusinessLayer.Category;
 using Microsoft.Data.SqlClient;
+using BusinessLayer.Category.RR;
 
 namespace IntegrationTest.Endpoint.Categories.GetList;
 

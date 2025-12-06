@@ -13,4 +13,9 @@
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.0-rc.1.25451.107" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="UseCases\GetCart\V02\" />
+    <Folder Include="UseCases\GetCart\V01\" />
+  </ItemGroup>
+
 </Project>

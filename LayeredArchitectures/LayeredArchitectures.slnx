@@ -17,6 +17,7 @@
     <Project Path="Catalog/Code/CatalogService/CatalogService.csproj" />
     <Project Path="Catalog/Code/DataAccess/DataAccess.csproj" />
     <Project Path="Catalog/Code/DomainEntities/DomainEntities.csproj" />
+    <Project Path="Catalog/Code/Utilities/Utilities.csproj" Id="fa5baa8a-5b24-4c8a-8fd1-b8a270d96507" />
   </Folder>
   <Folder Name="/Catalog/Test/">
     <Project Path="Catalog/Test/IntegrationTest/IntegrationTest.csproj" />

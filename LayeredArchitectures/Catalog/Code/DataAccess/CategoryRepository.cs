@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
+using Utilities.Pagination;
 using System.Text;
 
 namespace DataAccess;
@@ -9,7 +11,13 @@ namespace DataAccess;
 public interface ICategoryRepository 
 {
     Task<CategoryEntity?> GetSingle(Guid id);
-    Task<IList<CategoryEntity>> List();
+
+    Task<PaginatedResult<CategoryEntity>> List(
+        IList<Expression<Func<CategoryEntity, bool>>> filteringConditions,
+        Func<IQueryable<CategoryEntity>, IQueryable<CategoryEntity>> sortingConditions,
+        Func<IQueryable<CategoryEntity>, IQueryable<CategoryEntity>> paginationCondition);
+
+
     Task AddSingle(CategoryEntity entity);
     Task UpdateSingle(CategoryEntity entity);
     Task<bool> DeleteSingle(Guid id);
@@ -48,16 +56,37 @@ public class CategoryRepository : ICategoryRepository
         return entityToReturn;
     }
 
-    public async Task<IList<CategoryEntity>> List()
-    {
-        var dbSet = _appDbContext.Categories;
-        var collection = await dbSet.Include(x => x.ParentCategory).ToListAsync();
-        return collection;
-    }
-
     public async Task UpdateSingle(CategoryEntity entity)
     {
         _appDbContext.Categories.Update(entity);
         await _appDbContext.SaveChangesAsync(); 
     }
+
+    public async Task<PaginatedResult<CategoryEntity>> List(
+        IList<Expression<Func<CategoryEntity, bool>>> filteringConditions,
+        Func<IQueryable<CategoryEntity>, IQueryable<CategoryEntity>> sortingConditions,
+        Func<IQueryable<CategoryEntity>, IQueryable<CategoryEntity>> paginationCondition)
+    {
+        var query = _appDbContext.Categories.Include(x => x.ParentCategory).AsQueryable();
+
+        foreach (var item in filteringConditions)
+            query = query.Where(item);
+
+        int totalItemsFound = await query.CountAsync();
+
+        query = sortingConditions(query);
+        query = paginationCondition(query);
+
+        var data = await query.ToListAsync();
+
+        PaginatedResult<CategoryEntity> result = new()
+        {
+            ResultItems = data,
+            RetrievedItems = data.Count,
+            TotalAvailableItems = totalItemsFound,
+        };
+        return result;
+    }
+
+    
 }

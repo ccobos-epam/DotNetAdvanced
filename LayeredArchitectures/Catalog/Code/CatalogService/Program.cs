@@ -1,4 +1,5 @@
-using BusinessLayer;
+using BusinessLayer.Category;
+using BusinessLayer.Product.Service;
 using DataAccess;
 using FastEndpoints;
 using FastEndpoints.Swagger;
@@ -30,8 +31,8 @@ builder.Services
     {
         o.MaxEndpointVersion = 1;
         o.MinEndpointVersion = 1;
-        o.FlattenSchema = true;
-        o.ShortSchemaNames = true;
+        o.FlattenSchema = false;
+        o.ShortSchemaNames = false;
         o.DocumentSettings = s =>
         {
             s.DocumentName = "v1";

@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DomainEntities\DomainEntities.csproj" />
+    <ProjectReference Include="..\Utilities\Utilities.csproj" />
   </ItemGroup>
 
 </Project>
