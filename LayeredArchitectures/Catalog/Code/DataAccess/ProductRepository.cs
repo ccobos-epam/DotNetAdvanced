@@ -2,14 +2,19 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Text;
+using Utilities.Pagination;
 
 namespace DataAccess;
 
 public interface IProductRepository
 {
     Task<ProductEntity?> GetSingle(Guid id);
-    Task<IList<ProductEntity>> List();
+    Task<PaginatedResult<ProductEntity>> List(
+        IList<Expression<Func<ProductEntity, bool>>> filteringConditions,
+        Func<IQueryable<ProductEntity>, IQueryable<ProductEntity>> sortingConditions,
+        Func<IQueryable<ProductEntity>, IQueryable<ProductEntity>> paginationCondition);
     Task AddSingle(ProductEntity entity);
     Task UpdateSingle(ProductEntity entity);
     Task<bool> DeleteSingle(Guid id);
@@ -49,10 +54,30 @@ public class ProductRepository : IProductRepository
         return entityToReturn;
     }
 
-    public async Task<IList<ProductEntity>> List()
+    public async Task<PaginatedResult<ProductEntity>> List(
+        IList<Expression<Func<ProductEntity, bool>>> filteringConditions,
+        Func<IQueryable<ProductEntity>, IQueryable<ProductEntity>> sortingConditions,
+        Func<IQueryable<ProductEntity>, IQueryable<ProductEntity>> paginationCondition)
     {
-        var collection = await _appDbContext.Products.Include(x => x.Category).AsSplitQuery().ToListAsync();
-        return collection;
+        var baseQuey = _appDbContext.Products.Include(x => x.Category).AsSplitQuery();
+
+        foreach (var item in filteringConditions)
+            baseQuey = baseQuey.Where(item);
+
+        int totalItemsFound = await baseQuey.CountAsync();
+
+        baseQuey = sortingConditions(baseQuey);
+        baseQuey = paginationCondition(baseQuey);
+
+        var data = await baseQuey.ToListAsync();
+
+        PaginatedResult<ProductEntity> result = new()
+        {
+            ResultItems = data,
+            RetrievedItems = data.Count,
+            TotalAvailableItems = totalItemsFound,
+        };
+        return result;
     }
 
     public async Task UpdateSingle(ProductEntity entity)

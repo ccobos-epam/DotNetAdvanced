@@ -9,10 +9,11 @@ using Microsoft.Extensions.Hosting;
 using DataAccess;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
+using CatalogService.Category.Create;
 
 namespace IntegrationTest.Endpoint;
 
-public class CustomWebApplicationFactory : WebApplicationFactory<CatalogService.Category.CreateEnpoint>
+public class CustomWebApplicationFactory : WebApplicationFactory<IAssemblyMarker>
 {
     private readonly MsSqlContainer? _dbContainer;
     private readonly string? _connectionString;
