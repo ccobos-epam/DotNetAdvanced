@@ -10,10 +10,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 builder.Services.AddOpenApi();
-builder.Services.AddSingleton<LiteDatabase>(_ =>
+builder.Services.AddScoped<LiteDatabase>(sp =>
 {
-    var filename = builder.Configuration.GetConnectionString(InfrastructureData.connectionName) ?? "data.db";
-    return new LiteDatabase(filename);
+    IConfiguration configuration = sp.GetRequiredService<IConfiguration>();
+    string connectionString = configuration.GetConnectionString("LiteDb")!;
+    return new LiteDatabase(connectionString);
 });
 builder.Services.AddFastEndpoints().SwaggerDocument();
 builder.Services
