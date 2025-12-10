@@ -28,10 +28,24 @@ builder.Services
         o.DocumentSettings = s =>
         {
             s.DocumentName = "v1";
-            s.Title = "Catalog API";
+            s.Title = "Cart API V1";
             s.Version = "v1";
         };
-});
+    })
+    .SwaggerDocument(o =>
+    {
+        o.MaxEndpointVersion = 2;
+        o.MinEndpointVersion = 2;
+        o.FlattenSchema = false;
+        o.ShortSchemaNames = false;
+        o.DocumentSettings = s =>
+        {
+            s.DocumentName = "v2";
+            s.Title = "Cart API V2";
+            s.Version = "v2";
+        };
+    })
+    ;
 
 builder.Services
     .RegisterAddItemServices()
@@ -41,6 +55,7 @@ builder.Services
 
 builder.Services.AddScoped<CartService.UseCases.GetCart.V01.IBusinessLogic, CartService.UseCases.GetCart.V01.BusinessLogic>();
 builder.Services.AddScoped<CartService.UseCases.GetCart.V01.IRepository, CartService.UseCases.GetCart.V01.Repository>();
+builder.Services.AddScoped<CartService.UseCases.GetCart.V02.IBusinessLogic, CartService.UseCases.GetCart.V02.BusinessLogic>();
 
 var app = builder.Build();
 
