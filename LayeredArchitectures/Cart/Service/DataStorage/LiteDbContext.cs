@@ -14,7 +14,7 @@ public class LiteDbContext : IDisposable
     }
 
 
-    public ILiteCollection<T> GetCollection<T>(string name)
+    public virtual ILiteCollection<T> GetCollection<T>(string name)
     {
         return Db.GetCollection<T>(name);
     }
