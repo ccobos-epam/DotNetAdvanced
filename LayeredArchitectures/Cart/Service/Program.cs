@@ -5,6 +5,7 @@ using FastEndpoints;
 using FastEndpoints.Swagger;
 using LiteDB;
 using NSwag.AspNetCore;
+using System.Net.Sockets;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -35,7 +36,7 @@ builder.Services
     .SwaggerDocument(o =>
     {
         o.MaxEndpointVersion = 2;
-        o.MinEndpointVersion = 2;
+        o.MinEndpointVersion = 1;
         o.FlattenSchema = false;
         o.ShortSchemaNames = false;
         o.DocumentSettings = s =>
@@ -68,17 +69,6 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-Action<Config> FEConfig = options =>
-{
-    options.Versioning.Prefix = "v";
-    options.Versioning.PrependToRoute = true;
-    options.Versioning.DefaultVersion = 1;
-};
-Action<OpenApiDocumentMiddlewareSettings> FEOpenApi = options =>
-{
-    options.Path = "/apiSpecs/specs.json";
-    options.DocumentName = "v1";
-};
 Action<SwaggerUiSettings> FESwagger = options =>
 {
     options.DocExpansion = "full";
@@ -87,8 +77,30 @@ Action<SwaggerUiSettings> FESwagger = options =>
 };
 
 app
-    .UseFastEndpoints(FEConfig)
-    .UseSwaggerGen(FEOpenApi, FESwagger);
+    .UseFastEndpoints(options =>
+    {
+        options.Versioning.Prefix = "v";
+        options.Versioning.PrependToRoute = true;
+        options.Versioning.DefaultVersion = 1;
+    })
+    .UseSwaggerGen(options =>
+    {
+        options.DocumentName = "v1";
+        options.Path = "/apiSpecs/v1/specs.json";
+    }, null)
+    .UseSwaggerGen(options =>
+    {
+        options.DocumentName = "v2";
+        options.Path = "/apiSpecs/v2/specs.json";
+    }, null)
+    .UseSwaggerUi(options =>
+    {
+        options.Path = "/docs";
+        options.DocExpansion = "list";
+        options.DocumentTitle = "Documentation of Cart Service Project";
+        options.SwaggerRoutes.Add(new SwaggerUiRoute("Cart API V1", "/apiSpecs/v1/specs.json"));
+        options.SwaggerRoutes.Add(new SwaggerUiRoute("Cart API V2", "/apiSpecs/v2/specs.json"));
+    });
 app.Run();
 
 public partial class Program { }
