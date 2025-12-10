@@ -4,23 +4,43 @@ using CartService.UseCases;
 using FastEndpoints;
 using FastEndpoints.Swagger;
 using LiteDB;
+using NSwag.AspNetCore;
 
 
 var builder = WebApplication.CreateBuilder(args);
 
 
 builder.Services.AddOpenApi();
-builder.Services.AddSingleton<LiteDatabase>(_ =>
+builder.Services.AddScoped<LiteDatabase>(sp =>
 {
-    var filename = builder.Configuration.GetConnectionString(InfrastructureData.connectionName) ?? "data.db";
-    return new LiteDatabase(filename);
+    IConfiguration configuration = sp.GetRequiredService<IConfiguration>();
+    string connectionString = configuration.GetConnectionString("LiteDb")!;
+    return new LiteDatabase(connectionString);
 });
-builder.Services.AddFastEndpoints().SwaggerDocument();
+builder.Services
+    .AddFastEndpoints()
+    .SwaggerDocument(o => 
+    {
+        o.MaxEndpointVersion = 1;
+        o.MinEndpointVersion = 1;
+        o.FlattenSchema = false;
+        o.ShortSchemaNames = false;
+        o.DocumentSettings = s =>
+        {
+            s.DocumentName = "v1";
+            s.Title = "Catalog API";
+            s.Version = "v1";
+        };
+});
+
 builder.Services
     .RegisterAddItemServices()
     .RegisterCreateCartServices()
     .RegisterGetListServices()
     .RegisterRemoveItemServices();
+
+builder.Services.AddScoped<CartService.UseCases.GetCart.V01.IBusinessLogic, CartService.UseCases.GetCart.V01.BusinessLogic>();
+builder.Services.AddScoped<CartService.UseCases.GetCart.V01.IRepository, CartService.UseCases.GetCart.V01.Repository>();
 
 var app = builder.Build();
 
@@ -32,7 +52,28 @@ if (app.Environment.IsDevelopment())
 
 
 app.UseHttpsRedirection();
-app.UseFastEndpoints().UseSwaggerGen();
+
+Action<Config> FEConfig = options =>
+{
+    options.Versioning.Prefix = "v";
+    options.Versioning.PrependToRoute = true;
+    options.Versioning.DefaultVersion = 1;
+};
+Action<OpenApiDocumentMiddlewareSettings> FEOpenApi = options =>
+{
+    options.Path = "/apiSpecs/specs.json";
+    options.DocumentName = "v1";
+};
+Action<SwaggerUiSettings> FESwagger = options =>
+{
+    options.DocExpansion = "full";
+    options.DocumentPath = "/apiSpecs/specs.json";
+    options.Path = "/docs";
+};
+
+app
+    .UseFastEndpoints(FEConfig)
+    .UseSwaggerGen(FEOpenApi, FESwagger);
 app.Run();
 
 public partial class Program { }
