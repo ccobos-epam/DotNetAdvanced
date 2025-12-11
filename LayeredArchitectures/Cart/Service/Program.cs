@@ -58,6 +58,8 @@ builder.Services.AddScoped<CartService.UseCases.GetCart.V01.IBusinessLogic, Cart
 builder.Services.AddScoped<CartService.UseCases.GetCart.V01.IRepository, CartService.UseCases.GetCart.V01.Repository>();
 builder.Services.AddScoped<CartService.UseCases.GetCart.V02.IBusinessLogic, CartService.UseCases.GetCart.V02.BusinessLogic>();
 
+builder.Services.AddScoped<CartService.UseCases.AddItemToCart.V01.IBusinessLogic, CartService.UseCases.AddItemToCart.V01.BusinessLogic>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
