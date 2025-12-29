@@ -23,4 +23,7 @@
     <Project Path="Catalog/Test/IntegrationTest/IntegrationTest.csproj" />
     <Project Path="Catalog/Test/UnitTest/UnitTest.csproj" />
   </Folder>
+  <Folder Name="/Infra/">
+    <File Path="Infra/InfraServices.yml" />
+  </Folder>
 </Solution>

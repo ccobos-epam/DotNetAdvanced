@@ -1,0 +1,86 @@
+# The version of the Docker Compose file format.
+# 3.8 is a stable and widely supported version.
+version: '3.8'
+
+services:
+  # ===========================================================================
+  # Service 1: PostgreSQL Database
+  # ===========================================================================
+  postgres:
+    # The Docker image to download. '15-alpine' is a lightweight version of Postgres 15.
+    image: postgres:18.1-alpine3.23
+    
+    # Custom name for the container so you can easily find it (e.g., 'docker stop infra_postgres')
+    container_name: infra_postgres
+    
+    # Ensures the container starts up automatically if it crashes or if Docker restarts.
+    restart: always
+    
+    # Environment variables to configure the database credentials on initialization.
+    environment:
+      POSTGRES_USER: admin           # The superuser name
+      POSTGRES_PASSWORD: password123 # The superuser password
+      POSTGRES_DB: Catalog           # A default database created on startup
+      
+    # Port Mapping: "HOST_PORT:CONTAINER_PORT"
+    # We map host port 10105 to the standard Postgres port 5432.
+    ports:
+      - "10105:5432"
+      
+    # Volume Mapping: "VOLUME_NAME:INTERNAL_PATH"
+    # Maps a named volume to the internal folder where Postgres stores data.
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      
+    # Connects this container to our custom network.
+    networks:
+      - infra_network
+
+  # ===========================================================================
+  # Service 2: RabbitMQ Message Broker
+  # ===========================================================================
+  rabbitmq:
+    # Uses the 'management' tag which includes the web UI plugin pre-installed.
+    image: rabbitmq:4.2.2-management-alpine
+    
+    container_name: infra_rabbitmq
+    restart: always
+    
+    # Default credentials for RabbitMQ.
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+      
+    ports:
+      # Port 5672 is for AMQP (App-to-App communication).
+      # Mapped to Host Port 10106.
+      - "10106:5672"
+      
+      # Port 15672 is for the Management Web Dashboard.
+      # Mapped to Host Port 10107.
+      - "10107:15672"
+      
+    # Persist RabbitMQ queue data and messages.
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+      
+    networks:
+      - infra_network
+
+# ===========================================================================
+# Volumes Section
+# Defines persistent storage that survives container deletion.
+# ===========================================================================
+volumes:
+  postgres_data:
+    driver: local  # Uses the standard local Docker driver
+  rabbitmq_data:
+    driver: local
+
+# ===========================================================================
+# Networks Section
+# Defines a private network for these services to communicate.
+# ===========================================================================
+networks:
+  infra_network:
+    driver: bridge # Standard network type for containers on the same host
