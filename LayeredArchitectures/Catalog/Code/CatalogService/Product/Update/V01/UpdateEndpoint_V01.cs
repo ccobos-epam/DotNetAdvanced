@@ -29,6 +29,9 @@ public static class UpdateHandler
 
     public static WebApplication RegisterUpdateRoutes(WebApplication wa)
     {
+        var version = new Asp.Versioning.ApiVersion(1, 0);
+        var apiVersionSet = wa.NewApiVersionSet().HasApiVersion(version).ReportApiVersions().Build();
+
         var endpoint = wa.MapPatch("/v{version:apiVersion}/products/{productId:guid}", HandleUpdateProduct);
         endpoint.Accepts<RR.Update.ProductRequest_V01>("application/json");
         endpoint.Produces<Ok<RR.Update.ProductResponse_V01>>(200,"application/json");
@@ -38,7 +41,8 @@ public static class UpdateHandler
         endpoint.WithDisplayName("Update Product");
         endpoint.WithName("product-update");
         endpoint.WithTags("Update Product");
-        endpoint.MapToApiVersion(1, 0);
+        endpoint.WithApiVersionSet(apiVersionSet);
+        endpoint.MapToApiVersion(version);
         endpoint.AllowAnonymous();
         return wa;
     }
