@@ -18,54 +18,6 @@ using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace CatalogService.Product.Update.V01;
 
-public class UpdateEndpoint_V01 : FE.Endpoint<RR.Update.ProductRequest_V01, RR.Update.ProductResponse_V01>
-{
-    public IProductService ProductService { get; set; }
-
-    public override void Configure()
-    {
-        Patch("/products/{productId}");
-        Version(1);
-        AllowAnonymous();
-
-        Action<RouteHandlerBuilder> rhb = b =>
-        {
-            b.Accepts<RR.List.ProductRequest_V01>("application/json");
-            b.Produces<RR.List.ProductResponse_V01>(200, "application/json");
-        };
-
-        Action<FE.EndpointSummary> es = s =>
-        {
-            s.Summary = "Updates a single product";
-            s.Description = "Updates a product with all the information provided";
-            s.Responses[200] = "the updated product";
-            object response200 = new RR.Update.ProductResponse_V01() 
-            {
-                Id = Guid.NewGuid(),
-                Name = "Updated product",
-                Description = "Updated Description",
-                Price = 10,
-                Ammount = 3,
-                ImageUrl = "testUrl",
-                CategoryName = "Category",
-                CategoryId = Guid.NewGuid(),
-            };
-            s.ResponseExamples[200] =  response200;
-        };
-
-        Description(rhb, true);
-        Summary(es);
-    }
-
-    public override async Task HandleAsync(RR.Update.ProductRequest_V01 request,  CancellationToken cancellationToken)
-    {
-        Guid productId = Route<Guid>("productId");
-        RR.Update.ProductRequest_V01 newRequest = request with { Id = productId };
-        var response = await ProductService.UpdateProduct(newRequest);
-        await Send.OkAsync(response, cancellationToken);
-    }
-}
-
 public static class UpdateHandler
 {
     public static IServiceCollection AddUpdateServices(IServiceCollection services)
@@ -77,7 +29,7 @@ public static class UpdateHandler
 
     public static WebApplication RegisterUpdateRoutes(WebApplication wa)
     {
-        var endpoint = wa.MapPatch("/products/{productId:guid}", HandleUpdateProduct);
+        var endpoint = wa.MapPatch("/v{version:apiVersion}/products/{productId:guid}", HandleUpdateProduct);
         endpoint.Accepts<RR.Update.ProductRequest_V01>("application/json");
         endpoint.Produces<Ok<RR.Update.ProductResponse_V01>>(200,"application/json");
         endpoint.Produces<NotFound<string>>(404, "text/plain");
@@ -85,6 +37,8 @@ public static class UpdateHandler
         endpoint.WithDescription("Updates a product with all the information provided");
         endpoint.WithDisplayName("Update Product");
         endpoint.WithName("product-update");
+        endpoint.WithTags("Update Product");
+        endpoint.MapToApiVersion(1, 0);
         endpoint.AllowAnonymous();
         return wa;
     }

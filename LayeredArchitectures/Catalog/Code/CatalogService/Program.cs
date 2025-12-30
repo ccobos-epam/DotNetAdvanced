@@ -1,3 +1,4 @@
+using Asp.Versioning;
 using BusinessLayer.Category;
 using BusinessLayer.Product.Service;
 using DataAccess;
@@ -28,30 +29,52 @@ builder.Services.AddScoped<IProductService, ProductService>();
 
 //Minimal API Section:
 CatalogService.Product.Update.V01.UpdateHandler.AddUpdateServices(builder.Services);
-
+builder.Services.AddApiVersioning(options =>
+{
+    options.DefaultApiVersion = new ApiVersion(1, 0);
+    options.AssumeDefaultVersionWhenUnspecified = true;
+    options.ReportApiVersions = true;
+    options.ApiVersionReader = new UrlSegmentApiVersionReader();
+});
 builder.Services.AddOpenApi("v-m01");
 
+//builder.Services
+//    .AddFastEndpoints()
+//    .SwaggerDocument(o =>
+//    {
+//        o.MaxEndpointVersion = 1;
+//        o.MinEndpointVersion = 1;
+//        o.FlattenSchema = false;
+//        o.ShortSchemaNames = false;
+//        o.DocumentSettings = s =>
+//        {
+//            s.DocumentName = "v1";
+//            s.Title = "Catalog API";
+//            s.Version = "v1";
+//        };
+//    });
+
 builder.Services
-    .AddFastEndpoints()
-    .SwaggerDocument(o =>
-    {
-        o.MaxEndpointVersion = 1;
-        o.MinEndpointVersion = 1;
-        o.FlattenSchema = false;
-        o.ShortSchemaNames = false;
-        o.DocumentSettings = s =>
-        {
-            s.DocumentName = "v1";
-            s.Title = "Catalog API";
-            s.Version = "v1";
-        };
-    });
+    .AddFastEndpoints();
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 
 
+
+//Minimal API Section:
+app.NewApiVersionSet()
+    .HasApiVersion(new ApiVersion(1, 0))
+    .ReportApiVersions();
+CatalogService.Product.Update.V01.UpdateHandler.RegisterUpdateRoutes(app);
+
+app.MapOpenApi("minimal-api/docs/{documentName}.json");
+app.MapScalarApiReference("scalar-docs", options =>
+{
+    options.AddDocument("v01", "Minimal API Testing V01", "minimal-api/docs/v-m01.json");
+    options.WithTheme(ScalarTheme.Moon);
+});
 
 //FastEndpoints Section:
 Action<Config> FEConfig = options =>
@@ -72,20 +95,8 @@ Action<SwaggerUiSettings> FESwagger = options =>
     options.Path = "/docs";
 };
 app
-    .UseFastEndpoints(FEConfig)
-    .UseSwaggerGen(FEOpenApi, FESwagger);
+    .UseFastEndpoints(FEConfig);
+//.UseSwaggerGen(FEOpenApi, FESwagger);
+
 app.Run();
-
-//Minimal API Section:
-CatalogService.Product.Update.V01.UpdateHandler.RegisterUpdateRoutes(app);
-
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi("minimap-api/docs/{documentName}.json");
-    app.MapScalarApiReference("scalar-docs", options =>
-    {
-        options.AddDocument("v01", "Testing API", "minimap-api/docs/{documentName}.json");
-    });
-}
-
 public partial class Program { }
