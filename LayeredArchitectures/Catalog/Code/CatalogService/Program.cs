@@ -7,6 +7,8 @@ using FastEndpoints.Swagger;
 using Microsoft.EntityFrameworkCore;
 using NSwag.AspNetCore;
 using Scalar.AspNetCore;
+using Wolverine;
+using Wolverine.RabbitMQ;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -43,7 +45,18 @@ builder.Services
         options.SubstituteApiVersionInUrl = true;
     });
 builder.Services.AddOpenApi("v-m01");
+builder.Host.UseWolverine(options =>
+{
+    options.UseRabbitMq(options =>
+    {
+        options.HostName = "localhost";
+        options.Port = 10106;
+        options.UserName = "root";
+        options.Password = "password";
+    }).AutoProvision();
 
+    options.PublishAllMessages().ToRabbitQueue("CartUpdates");
+});
 //builder.Services
 //    .AddFastEndpoints()
 //    .SwaggerDocument(o =>

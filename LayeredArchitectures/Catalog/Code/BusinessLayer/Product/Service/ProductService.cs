@@ -126,6 +126,13 @@ public class ProductService : IProductService
             CategoryId = modifiedProduct.CategoryId,
             CategoryName = modifiedProduct.Category.Name
         };
+
+        var command = new RR.Update.UpdateCommand_V01()
+        {
+            ProductName = response.Name,
+            ProductPrice = response.Price
+        };
+
         return response;
     }
 
