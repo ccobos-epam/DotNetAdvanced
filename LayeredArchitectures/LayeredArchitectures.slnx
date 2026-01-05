@@ -25,5 +25,9 @@
   </Folder>
   <Folder Name="/Infra/">
     <File Path="Infra/InfraServices.yml" />
+    <File Path="RabbitMqConfig.json" />
+  </Folder>
+  <Folder Name="/CCLs/">
+    <Project Path="CCLs/CommandContracts/CommandContracts.csproj" />
   </Folder>
 </Solution>

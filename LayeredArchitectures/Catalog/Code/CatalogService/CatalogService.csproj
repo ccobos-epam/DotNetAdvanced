@@ -22,6 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\CCLs\CommandContracts\CommandContracts.csproj" />
     <ProjectReference Include="..\BusinessLayer\BusinessLayer.csproj" />
     <ProjectReference Include="..\Utilities\Utilities.csproj" />
   </ItemGroup>
@@ -30,4 +31,9 @@
     <InternalsVisibleTo Include=".\Test\IntegrationTest" />
   </ItemGroup>
 
+	<ItemGroup>
+		<Content Include="..\..\..\Infra\RabbitMqConfig.json" Link="RabbitMqConfig.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
 </Project>

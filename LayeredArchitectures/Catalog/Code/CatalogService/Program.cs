@@ -1,6 +1,7 @@
 using Asp.Versioning;
 using BusinessLayer.Category;
 using BusinessLayer.Product.Service;
+using CommandContracts.RabbitMQ;
 using DataAccess;
 using FastEndpoints;
 using FastEndpoints.Swagger;
@@ -50,8 +51,8 @@ builder.Services.AddOpenApi("v-m01");
 builder.Host.UseWolverine(options =>
 {
     var rabbitMqSetting = builder.Configuration
-        .GetSection(CatalogService.ConfigOptions.RabbitMqConfigValues.SectionName)
-        .Get<CatalogService.ConfigOptions.RabbitMqConfigValues>() ?? new CatalogService.ConfigOptions.RabbitMqConfigValues();
+        .GetSection(RabbitMqConfigValues.SectionName)
+        .Get<RabbitMqConfigValues>() ?? new RabbitMqConfigValues();
     options.UseRabbitMq(options =>
     {
         options.HostName = rabbitMqSetting.HostName;
@@ -60,7 +61,8 @@ builder.Host.UseWolverine(options =>
         options.Password = rabbitMqSetting.Password;
     }).AutoProvision();
 
-    options.PublishAllMessages().ToRabbitQueue("CartUpdates");
+    options.PublishMessage<CommandContracts.RabbitMQ.Product.Update.V01.UpdateCommand_V01>()
+        .ToRabbitQueue(RabbitMqConfigValues.QueueNames.CartUpdateQueue);
 });
 //builder.Services
 //    .AddFastEndpoints()

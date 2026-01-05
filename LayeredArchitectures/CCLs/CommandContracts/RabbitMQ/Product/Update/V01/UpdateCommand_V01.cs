@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace BusinessLayer.Product.RR.Update;
+namespace CommandContracts.RabbitMQ.Product.Update.V01;
 
 public record UpdateCommand_V01
 {

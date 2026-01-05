@@ -1,4 +1,4 @@
-﻿namespace CatalogService.ConfigOptions;
+﻿namespace CommandContracts.RabbitMQ;
 
 public class RabbitMqConfigValues
 {
