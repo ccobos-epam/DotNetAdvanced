@@ -45,14 +45,19 @@ builder.Services
         options.SubstituteApiVersionInUrl = true;
     });
 builder.Services.AddOpenApi("v-m01");
+
+
 builder.Host.UseWolverine(options =>
 {
+    var rabbitMqSetting = builder.Configuration
+        .GetSection(CatalogService.ConfigOptions.RabbitMqConfigValues.SectionName)
+        .Get<CatalogService.ConfigOptions.RabbitMqConfigValues>() ?? new CatalogService.ConfigOptions.RabbitMqConfigValues();
     options.UseRabbitMq(options =>
     {
-        options.HostName = "localhost";
-        options.Port = 10106;
-        options.UserName = "root";
-        options.Password = "password";
+        options.HostName = rabbitMqSetting.HostName;
+        options.Port = rabbitMqSetting.Port;
+        options.UserName = rabbitMqSetting.UserName;
+        options.Password = rabbitMqSetting.Password;
     }).AutoProvision();
 
     options.PublishAllMessages().ToRabbitQueue("CartUpdates");
