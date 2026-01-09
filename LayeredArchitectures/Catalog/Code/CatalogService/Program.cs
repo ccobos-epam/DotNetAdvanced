@@ -4,7 +4,6 @@ using BusinessLayer.Product.Service;
 using CommandContracts.RabbitMQ;
 using DataAccess;
 using FastEndpoints;
-using FastEndpoints.Swagger;
 using Microsoft.EntityFrameworkCore;
 using NSwag.AspNetCore;
 using Scalar.AspNetCore;
@@ -53,12 +52,12 @@ builder.Host.UseWolverine(options =>
     var rabbitMqSetting = builder.Configuration
         .GetSection(RabbitMqConfigValues.SectionName)
         .Get<RabbitMqConfigValues>() ?? new RabbitMqConfigValues();
-    options.UseRabbitMq(options =>
+    options.UseRabbitMq(mqOptions =>
     {
-        options.HostName = rabbitMqSetting.HostName;
-        options.Port = rabbitMqSetting.Port;
-        options.UserName = rabbitMqSetting.UserName;
-        options.Password = rabbitMqSetting.Password;
+        mqOptions.HostName = rabbitMqSetting.HostName;
+        mqOptions.Port = rabbitMqSetting.Port;
+        mqOptions.UserName = rabbitMqSetting.UserName;
+        mqOptions.Password = rabbitMqSetting.Password;
     }).AutoProvision();
 
     options.PublishMessage<CommandContracts.RabbitMQ.Product.Update.V01.UpdateCommand_V01>()
@@ -103,26 +102,26 @@ app.MapScalarApiReference("scalar-docs", options =>
 });
 
 //FastEndpoints Section:
-Action<Config> FEConfig = options =>
+Action<Config> feConfig = options =>
 {
     options.Versioning.Prefix = "v";
     options.Versioning.PrependToRoute = true;
     options.Versioning.DefaultVersion = 1;
 };
-Action<OpenApiDocumentMiddlewareSettings> FEOpenApi = options =>
+Action<OpenApiDocumentMiddlewareSettings> feOpenApi = options =>
 {
     options.Path = "/apiSpecs/specs.json";
     options.DocumentName = "v1";
 };
-Action<SwaggerUiSettings> FESwagger = options =>
+Action<SwaggerUiSettings> feSwagger = options =>
 {
     options.DocExpansion = "full";
     options.DocumentPath = "/apiSpecs/specs.json";
     options.Path = "/docs";
 };
 app
-    .UseFastEndpoints(FEConfig);
+    .UseFastEndpoints(feConfig);
 //.UseSwaggerGen(FEOpenApi, FESwagger);
 
-app.Run();
+await app.RunAsync();
 public partial class Program { }
