@@ -6,7 +6,9 @@ using FastEndpoints.Swagger;
 using LiteDB;
 using NSwag.AspNetCore;
 using System.Net.Sockets;
-
+using Wolverine;
+using Wolverine.RabbitMQ;
+using CommandContracts.RabbitMQ;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -48,6 +50,22 @@ builder.Services
     })
     ;
 
+builder.Host.UseWolverine(options =>
+{
+    var rabbitMqSetting = builder.Configuration
+        .GetSection(RabbitMqConfigValues.SectionName)
+        .Get<RabbitMqConfigValues>() ?? new RabbitMqConfigValues();
+    options.UseRabbitMq(mqOptions =>
+    {
+        mqOptions.HostName = rabbitMqSetting.HostName;
+        mqOptions.Port = rabbitMqSetting.Port;
+        mqOptions.UserName = rabbitMqSetting.UserName;
+        mqOptions.Password = rabbitMqSetting.Password;
+    }).AutoProvision();
+
+    options.ListenToRabbitQueue(RabbitMqConfigValues.QueueNames.CartUpdateQueue);
+});
+
 builder.Services
     .RegisterAddItemServices()
     .RegisterCreateCartServices()
@@ -68,8 +86,6 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-
-app.UseHttpsRedirection();
 
 Action<SwaggerUiSettings> FESwagger = options =>
 {

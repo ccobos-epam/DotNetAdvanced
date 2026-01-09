@@ -12,6 +12,12 @@
     <PackageReference Include="LiteDB" Version="5.0.21" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.0-rc.1.25451.107" />
     <PackageReference Include="OneOf" Version="3.0.271" />
+    <PackageReference Include="WolverineFx" Version="5.9.2" />
+    <PackageReference Include="WolverineFx.RabbitMQ" Version="5.9.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\CCLs\CommandContracts\CommandContracts.csproj" />
   </ItemGroup>
 
 </Project>
