@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Linq.Expressions;
 using RR = BusinessLayer.Product.RR;
+using Wolverine;
 
 using FilteredProduct = System.Func<DomainEntities.ProductEntity, bool>;
 using System.ComponentModel;
@@ -12,6 +13,7 @@ using Utilities.Pagination;
 using BusinessLayer.Product.RR.Get;
 using BusinessLayer.Product.RR.Update;
 using BusinessLayer.Product.RR.Create;
+using CommandContracts.RabbitMQ.Product.Update.V01;
 namespace BusinessLayer.Product.Service;
 
 
@@ -19,10 +21,12 @@ namespace BusinessLayer.Product.Service;
 public class ProductService : IProductService
 {
     private readonly IProductRepository repository;
+    private readonly IMessageBus messageBus;
 
-    public ProductService(IProductRepository repository)
+    public ProductService(IProductRepository repository, IMessageBus messageBus)
     {
         this.repository = repository;
+        this.messageBus = messageBus;
     }
 
     public async Task<RR.Create.ProductResponse_V01> CreateProduct(RR.Create.ProductRequest_V01 request)
@@ -126,6 +130,13 @@ public class ProductService : IProductService
             CategoryId = modifiedProduct.CategoryId,
             CategoryName = modifiedProduct.Category.Name
         };
+
+        var command = new UpdateCommand_V01()
+        {
+            ProductName = response.Name,
+            ProductPrice = response.Price
+        };
+        await messageBus.PublishAsync(command);
         return response;
     }
 

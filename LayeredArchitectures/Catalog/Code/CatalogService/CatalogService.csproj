@@ -6,13 +6,23 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="FastEndpoints" Version="7.0.1" />
-    <PackageReference Include="FastEndpoints.Swagger" Version="7.0.1" />
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.0-rc.2.25502.107" />
+	<PropertyGroup>
+		<NoWarn>$(NoWarn);CS8618</NoWarn>
+	</PropertyGroup>
+	
+	<ItemGroup>
+    <PackageReference Include="Asp.Versioning.Http" Version="8.1.1" />
+    <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="8.1.1" />
+    <PackageReference Include="FastEndpoints" Version="7.1.1" />
+    <PackageReference Include="FastEndpoints.Swagger" Version="7.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.1" />
+    <PackageReference Include="Scalar.AspNetCore" Version="2.11.10" />
+    <PackageReference Include="WolverineFx" Version="5.9.2" />
+    <PackageReference Include="WolverineFx.RabbitMQ" Version="5.9.2" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\CCLs\CommandContracts\CommandContracts.csproj" />
     <ProjectReference Include="..\BusinessLayer\BusinessLayer.csproj" />
     <ProjectReference Include="..\Utilities\Utilities.csproj" />
   </ItemGroup>
@@ -21,4 +31,9 @@
     <InternalsVisibleTo Include=".\Test\IntegrationTest" />
   </ItemGroup>
 
+	<ItemGroup>
+		<Content Include="..\..\..\Infra\RabbitMqConfig.json" Link="RabbitMqConfig.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
 </Project>

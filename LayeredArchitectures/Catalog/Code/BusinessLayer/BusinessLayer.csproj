@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="WolverineFx" Version="5.9.2" />
+    <PackageReference Include="WolverineFx.RabbitMQ" Version="5.9.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\CCLs\CommandContracts\CommandContracts.csproj" />
     <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
     <ProjectReference Include="..\Utilities\Utilities.csproj" />
   </ItemGroup>

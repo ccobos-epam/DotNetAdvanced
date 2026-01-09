@@ -49,17 +49,17 @@ public class AddItemToCart_V01 : FE.Endpoint<RequestDto, ResponseDto>
     public override async Task<FE.Void> HandleAsync(RequestDto req, CancellationToken ct)
     {
         var logicRespose = await BusinessLogic.AddItemsToCart(req.CartId, [.. req.ItemsToAdd]);
-
-        return await logicRespose.Match(
-            async completeSuccess => await Send.ResultAsync(TypedResults.Ok<ResponseDto>( new ResponseDto { CartId = req.CartId })),
-            partialSuccess => Send.ResultAsync(TypedResults.Ok<ResponseDto>( new ResponseDto { 
-                CartId = req.CartId, 
-                CartItemsNotFound = partialSuccess.Value, 
-                NumberOfItemsNotFound = partialSuccess.Value.Length})),
-            itemsNotFound => this.Send.ResultAsync(TypedResults.BadRequest<string>("The following item ids are not present: " + String.Join(", ", itemsNotFound))),
-            _ => Send.ResultAsync(TypedResults.NotFound<string>($"The cart with the given ID: {req.CartId} is not found.")),
-            _ => Send.ResultAsync(TypedResults.InternalServerError())
-            );
+        throw new NotImplementedException();
+        //return await logicRespose.Match(
+        //    async completeSuccess => await Send.ResultAsync(TypedResults.Ok<ResponseDto>( new ResponseDto { CartId = req.CartId })),
+        //    partialSuccess => Send.ResultAsync(TypedResults.Ok<ResponseDto>( new ResponseDto { 
+        //        CartId = req.CartId, 
+        //        CartItemsNotFound = partialSuccess.Value, 
+        //        NumberOfItemsNotFound = partialSuccess.Value.Length})),
+        //    itemsNotFound => this.Send.ResultAsync(TypedResults.BadRequest<string>("The following item ids are not present: " + String.Join(", ", itemsNotFound))),
+        //    _ => Send.ResultAsync(TypedResults.NotFound<string>($"The cart with the given ID: {req.CartId} is not found.")),
+        //    _ => Send.ResultAsync(TypedResults.InternalServerError())
+        //    );
 
 
     }

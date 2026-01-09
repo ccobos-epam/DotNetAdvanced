@@ -1,0 +1,8 @@
+{
+  "RabbitMqSettings": {
+    "HostName": "localhost",
+    "Port": 10106,
+    "UserName": "guest",
+    "Password": "guest"
+  }
+}

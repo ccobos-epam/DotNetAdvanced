@@ -6,7 +6,7 @@ public class LiteDbContext : IDisposable
 {
     private bool disposedValue;
 
-    public LiteDatabase Db { get; init; }
+    private LiteDatabase Db { get; init; }
 
     public LiteDbContext(string connectionString)
     {
