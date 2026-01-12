@@ -1,6 +1,3 @@
-# The version of the Docker Compose file format.
-# 3.8 is a stable and widely supported version.
-version: '3.8'
 
 services:
   # ===========================================================================
@@ -31,10 +28,17 @@ services:
     # Maps a named volume to the internal folder where Postgres stores data.
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
       
     # Connects this container to our custom network.
     networks:
       - infra_network
+    
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U keycloak"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   # ===========================================================================
   # Service 2: RabbitMQ Message Broker
@@ -66,6 +70,32 @@ services:
       
     networks:
       - infra_network
+
+  # ===========================================================================
+  # Service 3: Keycloak Identity Management
+  # ===========================================================================
+  keycloack:
+    image: keycloak/keycloak:26.5
+    container_name: infra_keycloak
+    restart: always
+    command: start-dev
+    environment:
+        KC_BOOTSTRAP_ADMIN_USERNAME: admin
+        KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+        KC_DB: postgres
+        KC_DB_URL: jdbc:postgresql://postgres:5432/keycloak
+        KC_DB_USERNAME: keycloakuser
+        KC_DB_PASSWORD: keycloak123
+        KC_DB_SCHEMA: keycloak
+        KC_HOSTNAME: localhost
+        KC_HTTP_ENABLED: "true"
+    ports:
+      - "10108:8080"
+    networks:
+      - infra_network
+    depends_on:
+      postgres:
+        condition:  service_healthy
 
 # ===========================================================================
 # Volumes Section
