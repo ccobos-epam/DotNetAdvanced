@@ -1,3 +1,4 @@
+name: DotNetAdv
 
 services:
   # ===========================================================================
@@ -8,7 +9,7 @@ services:
     image: postgres:18.1-alpine3.23
     
     # Custom name for the container so you can easily find it (e.g., 'docker stop infra_postgres')
-    container_name: infra_postgres
+    container_name: Database
     
     # Ensures the container starts up automatically if it crashes or if Docker restarts.
     restart: always
@@ -32,7 +33,7 @@ services:
       
     # Connects this container to our custom network.
     networks:
-      - infra_network
+      - internal_network
     
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U keycloak"]
@@ -47,7 +48,7 @@ services:
     # Uses the 'management' tag which includes the web UI plugin pre-installed.
     image: rabbitmq:4.2.2-management-alpine
     
-    container_name: infra_rabbitmq
+    container_name: MessageQueue
     restart: always
     
     # Default credentials for RabbitMQ.
@@ -63,20 +64,27 @@ services:
       # Port 15672 is for the Management Web Dashboard.
       # Mapped to Host Port 10107.
       - "10107:15672"
-      
+    
+    healthcheck:
+      test: [ "CMD", "rabbitmq-diagnostics", "-q", "ping" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
+    
     # Persist RabbitMQ queue data and messages.
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
       
     networks:
-      - infra_network
+      - internal_network
 
   # ===========================================================================
   # Service 3: Keycloak Identity Management
   # ===========================================================================
   keycloack:
     image: keycloak/keycloak:26.5
-    container_name: infra_keycloak
+    container_name: IdentityServer
     restart: always
     command: start-dev
     environment:
@@ -93,9 +101,15 @@ services:
     ports:
       - "10108:8080"
     networks:
-      - infra_network
+      - internal_network
     volumes:
       - keycloak_data:/opt/keycloak/data
+    healthcheck:
+      test: ["CMD-SHELL", "exec 3<>/dev/tcp/127.0.0.1/9000; echo -e 'GET /health/ready HTTP/1.1\r\nhost: localhost\r\nConnection: close\r\n\r\n' >&3; grep 'HTTP/1.1 200 OK' <&3"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
     depends_on:
       postgres:
         condition:  service_healthy
@@ -117,5 +131,5 @@ volumes:
 # Defines a private network for these services to communicate.
 # ===========================================================================
 networks:
-  infra_network:
+  internal_network:
     driver: bridge # Standard network type for containers on the same host
