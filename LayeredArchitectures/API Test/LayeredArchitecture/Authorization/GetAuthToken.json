@@ -1,0 +1,62 @@
+{
+  "name": "GetAuthToken",
+  "request": {
+    "type": "http",
+    "url": "http://localhost:10108/realms/DotNetAdv/protocol/openid-connect/token",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "POST",
+    "queryParams": [],
+    "headers": [],
+    "body": [
+      {
+        "id": 1768268707331,
+        "key": "grant_type",
+        "value": "password",
+        "isEnabled": true,
+        "description": "",
+        "dataType": "string"
+      },
+      {
+        "id": 1768268751569,
+        "key": "scope",
+        "value": "email",
+        "isEnabled": true,
+        "description": "",
+        "dataType": "string"
+      },
+      {
+        "id": 1768268807721,
+        "key": "client_id",
+        "value": "public-client",
+        "isEnabled": true,
+        "description": "",
+        "dataType": "string"
+      },
+      {
+        "id": 1768268848404,
+        "key": "username",
+        "value": "testAdmin",
+        "isEnabled": true,
+        "description": "",
+        "dataType": "string"
+      },
+      {
+        "id": 1768268884844,
+        "key": "password",
+        "value": "123",
+        "isEnabled": true,
+        "description": "",
+        "dataType": "string"
+      }
+    ],
+    "contentType": "application/x-www-form-urlencoded",
+    "auth": {
+      "currentAuthType": "INHERIT",
+      "authConfigStore": {}
+    },
+    "pathVariables": []
+  }
+}

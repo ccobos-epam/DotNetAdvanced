@@ -89,10 +89,13 @@ services:
         KC_DB_SCHEMA: keycloak
         KC_HOSTNAME: localhost
         KC_HTTP_ENABLED: "true"
+        KC_HEALTH_ENABLED: true
     ports:
       - "10108:8080"
     networks:
       - infra_network
+    volumes:
+      - keycloak_data:/opt/keycloak/data
     depends_on:
       postgres:
         condition:  service_healthy
@@ -105,6 +108,8 @@ volumes:
   postgres_data:
     driver: local  # Uses the standard local Docker driver
   rabbitmq_data:
+    driver: local
+  keycloak_data:
     driver: local
 
 # ===========================================================================
