@@ -31,4 +31,21 @@
   <Folder Name="/CCLs/">
     <Project Path="CCLs/CommandContracts/CommandContracts.csproj" />
   </Folder>
+  
+  
+  <Folder Name="/SV01/" />
+  
+  <Folder Name="/SV01/CartProject/" />
+  <Folder Name="/SV01/CartProject/Source/" />
+  <Folder Name="/SV01/CartProject/Source/WebApi/" >
+	<Project Path="SV01/CartProject/Source/WebApi/CartWebApi.csproj" />
+  </Folder>
+  <Folder Name="/SV01/CartProject/Tests/" />
+  
+  <Folder Name="/SV01/CatalogProject/" />
+  <Folder Name="/SV01/CatalogProject/Source/" />
+  <Folder Name="/SV01/CatalogProject/Source/WebApi/">
+	<Project Path="SV01/CatalogProject/Source/WebApi/CatalogWebApi.csproj" />
+  </Folder>
+  <Folder Name="/SV01/CatalogProject/Tests/" />
 </Solution>
