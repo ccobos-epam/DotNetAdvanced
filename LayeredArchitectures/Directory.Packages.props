@@ -4,13 +4,35 @@
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
   <ItemGroup>
-	<PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="10.0.2" />
-	<PackageVersion Include="OneOf" Version="3.0.271" />
-	<PackageVersion Include="WolverineFx" Version="5.12.0" />
-	<PackageVersion Include="WolverineFx.RDBMS" Version="5.12.0" />
-	<PackageVersion Include="WolverineFx.Postgresql" Version="5.12.0" />
-	<PackageVersion Include="WolverineFx.Marten" Version="5.12.0" />
-	<PackageVersion Include="WolverineFx.FluentValidation" Version="5.12.0" />
-	<PackageVersion Include="WolverineFx.RabbitMQ" Version="5.12.0" />
+		<PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="10.0.2" />
+		<PackageVersion Include="Microsoft.EntityFrameworkCore" Version="10.0.2" />
+		<PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.0" />
+		<PackageVersion Include="OneOf" Version="3.0.271" />
+		<PackageVersion Include="WolverineFx" Version="5.12.0" />
+		<PackageVersion Include="WolverineFx.RDBMS" Version="5.12.0" />
+		<PackageVersion Include="WolverineFx.Postgresql" Version="5.12.0" />
+		<PackageVersion Include="WolverineFx.Marten" Version="5.12.0" />
+		<PackageVersion Include="WolverineFx.FluentValidation" Version="5.12.0" />
+		<PackageVersion Include="WolverineFx.RabbitMQ" Version="5.12.0" />
+		<PackageVersion Include="Marten" Version="8.18.3" />
+		<PackageVersion Include="Marten.NodaTime" Version="8.18.3" />
+		<PackageVersion Include="Marten.AspNetCore" Version="8.18.3" />
+		<PackageVersion Include="NodaTime" Version="3.3.0" />
+		<PackageVersion Include="dbup-core" Version="6.0.15" />
+		<PackageVersion Include="dbup-postgresql" Version="6.1.5" />
+		<PackageVersion Include="Testcontainers" Version="4.10.0" />
+		<PackageVersion Include="Testcontainers.PostgreSql" Version="4.10.0" />
+		<PackageVersion Include="TUnit" Version="1.12.65" />
+		<PackageVersion Include="Scalar.AspNetCore" Version="2.12.21" />
+		<PackageVersion Include="NSubstitute" Version="5.3.0" />
+		<PackageVersion Include="FluentValidation" Version="12.1.1" />
+		<PackageVersion Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
+		<PackageVersion Include="Serilog" Version="4.3.0" />
+		<PackageVersion Include="Serilog.Sinks.File" Version="7.0.0" />
+		<PackageVersion Include="Serilog.Sinks.Console" Version="6.1.1"/>
+		<PackageVersion Include="Serilog.Sinks.Postgresql.Alternative" Version="4.2.0" />
+		<PackageVersion Include="Serilog.Extensions.Logging" Version="10.0.0" />
+		<PackageVersion Include="Serilog.Extensions" Version="9.1.0" />
+		<PackageVersion Include="Serilog.Settings.Configuration" Version="10.0.0" />
   </ItemGroup>
 </Project>
