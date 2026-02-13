@@ -8,6 +8,17 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
+    <PackageReference Include="Asp.Versioning.Http" />
+    <PackageReference Include="OneOf" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Features\CartItem\Entities\" />
+    <Folder Include="Features\Cart\Entities\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Common\IEndpointHandler.cs" />
   </ItemGroup>
 
 </Project>
