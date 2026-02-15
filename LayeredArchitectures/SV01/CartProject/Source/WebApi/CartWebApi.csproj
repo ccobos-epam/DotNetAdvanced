@@ -15,7 +15,6 @@
 
   <ItemGroup>
     <Folder Include="Features\CartItem\Entities\" />
-    <Folder Include="Features\Cart\Entities\" />
     <Folder Include="Links\" />
   </ItemGroup>
 
