@@ -10,15 +10,23 @@
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
     <PackageReference Include="Asp.Versioning.Http" />
     <PackageReference Include="OneOf" />
+    <PackageReference Include="Marten" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Features\CartItem\Entities\" />
     <Folder Include="Features\Cart\Entities\" />
+    <Folder Include="Links\" />
   </ItemGroup>
 
   <ItemGroup>
     <Compile Remove="Common\IEndpointHandler.cs" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Content Include="..\..\..\Common\Settings\MartenConfig.json" Link="Links\MartenConfig.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>

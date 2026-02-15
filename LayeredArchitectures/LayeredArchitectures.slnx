@@ -48,4 +48,10 @@
 	<Project Path="SV01/CatalogProject/Source/WebApi/CatalogWebApi.csproj" />
   </Folder>
   <Folder Name="/SV01/CatalogProject/Tests/" />
+  
+  <Folder Name="/SV01/Common/" />
+  <Folder Name="/SV01/Common/Infrastructure/" />
+  <Folder Name="/SV01/Common/Settings/" > 
+    <File Path="SV01/Common/Settings/MartenConfig.json"/> 
+  </Folder>
 </Solution>

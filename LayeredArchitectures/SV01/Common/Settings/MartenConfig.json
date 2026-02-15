@@ -1,0 +1,11 @@
+﻿{
+  "MartenConfig": {
+    "ConnectionStringValues": {
+      "UserId": "martenAdmin",
+      "Password": "martenPassword",
+      "Host": "localhost",
+      "Port": "10100",
+      "Database": "marten"
+    }
+  }
+}
