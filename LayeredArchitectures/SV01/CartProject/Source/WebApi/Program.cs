@@ -3,6 +3,7 @@ using CartWebApi.Features.Cart.CreateCart.V01;
 
 var builder = WebApplication.CreateBuilder(args);
 
+//Added configuration files
 builder.Configuration.AddJsonFile("MartenConfig.json", false, true);
 
 // Add services to the container.
