@@ -5,7 +5,8 @@
       "Password": "martenPassword",
       "Host": "localhost",
       "Port": "10100",
-      "Database": "marten"
+      "Database": "marten",
+      "Schema": "cart"
     }
   }
 }
