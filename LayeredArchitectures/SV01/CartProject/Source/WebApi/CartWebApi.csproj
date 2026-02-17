@@ -23,9 +23,8 @@
   </ItemGroup>
   
   <ItemGroup>
-    <Content Include="..\..\..\Common\Settings\MartenConfig.json" Link="Links\MartenConfig.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <Content Include="..\..\..\Common\Settings\MartenConfig.json" Link="Links\MartenConfig.json" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="..\..\..\Common\Settings\PostgreSQLConfig.json" Link="Links\PostgreSQLConfig.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
 </Project>
