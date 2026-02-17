@@ -1,0 +1,29 @@
+﻿{
+  "PostgreSqlInstance": {
+    "Host": "localhost",
+    "Port": 10100,
+    "Database": "Adv"
+  },
+  "PostgreSqlUsers": {
+    "Admin": {
+      "UserId": "admin",
+      "Password": "password123",
+      "Schema": "public"
+    },
+    "DocumentsDb": {
+      "UserId": "cartUser",
+      "Password": "cartPassword",
+      "Schema": "cart"
+    },
+    "RelationalDb": {
+      "UserId": "catalogUser",
+      "Password": "catalogPassword",
+      "Schema": "catalog"
+    },
+    "UserManagement": {
+      "UserId": "IamUser",
+      "Password": "IamPassword",
+      "Schema": "Iam"
+    }
+  }
+}
