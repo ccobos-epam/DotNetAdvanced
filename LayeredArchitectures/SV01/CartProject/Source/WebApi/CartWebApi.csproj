@@ -23,8 +23,8 @@
   </ItemGroup>
   
   <ItemGroup>
-    <Content Include="..\..\..\Common\Settings\MartenConfig.json" Link="Links\MartenConfig.json" CopyToOutputDirectory="PreserveNewest" />
-    <Content Include="..\..\..\Common\Settings\PostgreSQLConfig.json" Link="Links\PostgreSQLConfig.json" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="..\..\..\Common\Contracts\SharedClasses\OptionsPattern\PostgreSQL\PostgreSQLConfig.json" 
+             Link="Links\PostgreSQLConfig.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
 </Project>

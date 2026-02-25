@@ -50,14 +50,9 @@
   <Folder Name="/SV01/CatalogProject/Tests/" />
   
   <Folder Name="/SV01/Common/" />
-  
   <Folder Name="/SV01/Common/Infrastructure/" />
+  <Folder Name="/SV01/Common/Settings/" />
   
-  <Folder Name="/SV01/Common/Settings/"> 
-    <File Path="SV01/Common/Settings/MartenConfig.json" />
-    <File Path="SV01/Common/Settings/PostgreSQLConfig.json" /> 
-  </Folder>
-
   <Folder Name="/SV01/Common/Contracts/">
     <Project Path="SV01/Common/Contracts/SharedClasses/SharedClasses.csproj" />
   </Folder>
