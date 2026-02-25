@@ -35,6 +35,5 @@
 	<PackageVersion Include="Serilog.Extensions" Version="9.1.0" />
 	<PackageVersion Include="Serilog.Settings.Configuration" Version="10.0.0" />
 	<PackageVersion Include="Asp.Versioning.Http" Version="8.1.1" />
-  	<PackageVersion Include="FluentValidation" Version="12.1.1" />
   </ItemGroup>
 </Project>
