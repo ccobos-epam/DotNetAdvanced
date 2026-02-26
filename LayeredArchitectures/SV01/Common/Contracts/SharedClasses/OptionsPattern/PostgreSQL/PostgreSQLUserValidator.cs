@@ -2,7 +2,7 @@ using FluentValidation;
 
 namespace SharedClasses.OptionsPattern.PostgreSQL;
 
-public class PostgreSqlUserValidator : AbstractValidator<PostgreSqlUsersOptions>
+public class PostgreSqlUserValidator : AbstractValidator<PostgreSqlUserOptions>
 {
     public PostgreSqlUserValidator()
     {

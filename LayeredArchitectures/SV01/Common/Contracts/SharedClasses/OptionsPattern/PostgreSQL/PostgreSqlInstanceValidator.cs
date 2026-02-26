@@ -2,9 +2,9 @@ using FluentValidation;
 
 namespace SharedClasses.OptionsPattern.PostgreSQL;
 
-public class PostgreSqlInstaceValidator : AbstractValidator<PostgreSqlInstanceOptions>
+public class PostgreSqlInstanceValidator : AbstractValidator<PostgreSqlInstanceOptions>
 {
-    public PostgreSqlInstaceValidator()
+    public PostgreSqlInstanceValidator()
     {
         RuleFor(x => x.Database).NotEmpty();
         
